@@ -10,14 +10,19 @@ LDFLAGS = -Bstatic
 LIBS = 
 
 BUILDDIR = build/
-HEADER_FILES = 
-SOURCE_FILES = Main.cpp
+HEADER_FILES = Game.h Dice.h Attributes.h Weapon.h MemeFighter.h
+SOURCE_FILES = Main.cpp Game.cpp MemeFighter.cpp
+OBJS = $(patsubst %.cpp,$(BUILDDIR)%.o,$(SOURCE_FILES))
 
 debug:  CXXFLAGS = $(CXXFLAGS_COMMON) $(CXXFLAGS_DEBUG)
-
-debug: $(SOURCE_FILES)
+debug: $(PROJECT)
 	mkdir -p $(BUILDDIR)
+
+$(PROJECT): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $(BUILDDIR)$(PROJECT) $(LIBS)
+
+$(BUILDDIR)%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 test:
 	$(BUILDDIR)$(PROJECT)
